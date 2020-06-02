@@ -1,0 +1,40 @@
+﻿html {
+    background-image: url("../images/gradient.png");
+    background-repeat: repeat-x;
+    background-attachment: fixed;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    margin-top: 0;
+    color: white;
+}
+
+nav {
+    background-color: rgb(30, 30, 30);
+    box-shadow: 0 10px 20px 0 rgba(5, 2, 0, 0.2);
+}
+
+.contentBox {
+    border: 2px solid white;
+    border-radius: 10px;
+    background-color: white;
+    color: rgb(30, 30, 30);
+    padding: 0px 20px 20px 20px;
+    margin: 25px 100px;
+}
+
+#casinoBox {
+    border: 2px solid green;
+    background-color: green;
+}
+
+footer {
+    padding : 25px 0px;
+}
+
+.bg-black {
+    background-color: black;
+}
+

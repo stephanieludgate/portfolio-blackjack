@@ -1,0 +1,33 @@
+﻿@model Blackjack.Models.Game
+
+@{
+    ViewData["Title"] = "Hit";
+}
+
+    <div class="contentBox col-6 offset-3 my-5 p-4 bg-light text-dark border border-dark rounded-lg" id="casinoBox">
+        <h3>@ViewData["Title"]</h3>
+        <div>
+            @ViewData["Message"]
+        </div>
+        <h4>Player Cards</h4>
+        @Html.DisplayNameFor(model => model.Player.Username) : @Html.DisplayFor(model => model.Player.Username)
+
+        @foreach (var item in Model.Player.Hand.Cards)
+        {
+            @Html.DisplayFor(modelItem => item.CardSuit)
+        }
+
+
+
+        <div>@ViewData["PlayerInfo"]</div>
+        <h4>Dealer Cards</h4>
+        <div>@ViewData["DealerInfo"]</div>
+        <h4>Next Card</h4>
+        <div>@ViewData["DealCard"]</div>
+        <form asp-action="Play">
+            <input type="submit" value="Hit" class="btn btn-default" />
+        </form>
+    </div>
+
+
+
