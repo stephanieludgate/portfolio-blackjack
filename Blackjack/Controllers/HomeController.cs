@@ -7,38 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 using Blackjack.Models;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 
 namespace Blackjack.Controllers
 {
     public class HomeController : Controller
     {
-        //public List<Game> Games { get; set; }
-        public Game Game { get; set; }
-        public int gameCount = 0;
-        int keeptrack = 0;
-
-        //public HomeController()
-        //{
-        //    //Games = new List<Game>();
-        //    this.Game = new Game();
-        //}
+        public static List<Game> gameList = new List<Game>();
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
@@ -48,9 +26,46 @@ namespace Blackjack.Controllers
 
             return View();
         }
-        
+
+        public IActionResult Start()
+        {
+            // create instance of a game
+            Guid newID = Guid.NewGuid();
+            Game newGame = new Game(newID);
+
+            // Add 2 cards each to start
+            newGame.Player.Hand.Cards.Add(newGame.Deck.DealCard());
+            newGame.Dealer.Hand.Cards.Add(newGame.Deck.DealCard());
+            newGame.Player.Hand.Cards.Add(newGame.Deck.DealCard());
+            newGame.Dealer.Hand.Cards.Add(newGame.Deck.DealCard());
+
+            gameList.Add(newGame);
+            HttpContext.Session.SetString("CurrentGameID", newID.ToString());
+
+            return View(newGame);
+        }
+
+        [HttpPost]
+        public IActionResult Start(string str)
+        {
+            Guid currentGameID = new Guid(HttpContext.Session.GetString("CurrentGameID"));
+            Game currentGame = gameList.Where(g => g.GameID == currentGameID).FirstOrDefault();
+
+            currentGame.Player.Bet = Int32.Parse(HttpContext.Request.Form["betPlaced"]);
+            ViewData["Bet"] = currentGame.Player.Bet;
+
+            ViewData["Temp"] = HttpContext.Session.GetString("CurrentGameID");
+
+            //return View(currentGame);
+            return RedirectToAction("Play");
+        }
+
+
         public IActionResult Play()
         {
+            Guid currentGameID = new Guid(HttpContext.Session.GetString("CurrentGameID"));
+            Game currentGame = gameList.Where(g => g.GameID == currentGameID).FirstOrDefault();
+            return View(currentGame);
             //Game newGame = new Game() { GameID = 1, IsActive = true };
             //newGame.Player.Username = "HELP";
             //this.Games.Add(newGame);
@@ -69,47 +84,60 @@ namespace Blackjack.Controllers
             //this.Games.Add(newGame);
             //return View(newGame);
 
-            gameCount++;
-            this.Game = new Game() { GameID = gameCount, IsActive = true };
-            this.Game.Player.Username = "PLEASE";
-            return View(this.Game);
+            //gameCount++;
+            //this.Game = new Game() { GameID = gameCount, IsActive = true };
+            //this.Game.Player.Username = "PLEASE";
+            //return View(this.Game);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Play([Bind("GameID, Player, Dealer, Deck")]Game game)
+        public IActionResult Hit()
         {
-            keeptrack++;
-            if(keeptrack > 1)
-            {
+            Guid currentGameID = new Guid(HttpContext.Session.GetString("CurrentGameID"));
+            Game currentGame = gameList.Where(g => g.GameID == currentGameID).FirstOrDefault();
 
-            }
-            else
-            {
-                game.Player.Hand.Cards.Add(game.Deck.DealCard());
-                game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
-                game.Player.Hand.Cards.Add(game.Deck.DealCard());
-                game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
-            }
+            currentGame.Player.Hand.Cards.Add(currentGame.Deck.DealCard());
+            currentGame.Dealer.Hand.Cards.Add(currentGame.Deck.DealCard());
 
-            ViewData["Winner"] = "BET " + game.Player.Bet.ToString() + " GAME ID " + game.GameID;
+            return RedirectToAction("Play");
 
-            return View(game);
+
         }
 
-        [HttpPost]
-        public async Task<IActionResult> MakeMove([Bind("GameID, Player, Dealer, Deck")]Game game, SelectListItem item)
-        {
-            //Game currentGame = Games.Where(g => g.GameID == game.GameID) as Game;
-            //game.Player.Hand.Cards.Add(game.Deck.DealCard());
-            //game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
-            //game.Player.Hand.Cards.Add(game.Deck.DealCard());
-            //game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
+        //[HttpPost]
+        //public async Task<IActionResult> Play([Bind("GameID, Player, Dealer, Deck")]Game game)
+        //{
+        //    keeptrack++;
+        //    if(keeptrack > 1)
+        //    {
 
-            ViewData["Winner"] = "BET " + game.Player.Bet.ToString() + " GAME ID " + game.GameID + " Move " + item.Value;
-            //ViewData["Winner"] = game.Stand().ToString();
+        //    }
+        //    else
+        //    {
+        //        game.Player.Hand.Cards.Add(game.Deck.DealCard());
+        //        game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
+        //        game.Player.Hand.Cards.Add(game.Deck.DealCard());
+        //        game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
+        //    }
 
-            return View("Play", this.Game);
-        }
+        //    ViewData["Winner"] = "BET " + game.Player.Bet.ToString() + " GAME ID " + game.GameID;
+
+        //    return View(game);
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> MakeMove([Bind("GameID, Player, Dealer, Deck")]Game game, SelectListItem item)
+        //{
+        //    //Game currentGame = Games.Where(g => g.GameID == game.GameID) as Game;
+        //    //game.Player.Hand.Cards.Add(game.Deck.DealCard());
+        //    //game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
+        //    //game.Player.Hand.Cards.Add(game.Deck.DealCard());
+        //    //game.Dealer.Hand.Cards.Add(game.Deck.DealCard());
+
+        //    ViewData["Winner"] = "BET " + game.Player.Bet.ToString() + " GAME ID " + game.GameID + " Move " + item.Value;
+        //    //ViewData["Winner"] = game.Stand().ToString();
+
+        //    return View("Play", this.Game);
+        //}
 
         public void Stand()
         {

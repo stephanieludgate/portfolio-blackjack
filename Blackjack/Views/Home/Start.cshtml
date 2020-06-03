@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "New Game";
+}
+
+<div class="contentBox col-6 offset-3 my-5 p-4 bg-light text-dark border border-dark rounded-lg" id="casinoBox">
+    <h3>@ViewData["Title"]</h3>
+
+    @if (Context.Request.Method == "GET")
+    {
+        <p>Place a Bet</p>
+        <form method="post">
+            <input type="text" name="betPlaced" />
+            <input type="submit" value="Hit" class="btn btn-default" />
+        </form>
+    }
+    else
+    {
+        <p>Hello from POST</p>
+        <p>Bet place = @ViewData["Bet"]</p>
+        <p>Session Variable = @ViewData["Temp"]</p>
+    }
+
+</div>

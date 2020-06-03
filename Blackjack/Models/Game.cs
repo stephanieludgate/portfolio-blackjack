@@ -7,14 +7,15 @@ namespace Blackjack.Models
 {
     public class Game
     {
-        public int GameID { get; set; }
+        public Guid GameID { get; set; }
         public Player Player { get; set; }
         public Dealer Dealer { get; set; }
         public Deck Deck { get; set; }
         public bool IsActive { get; set; }
 
-        public Game()
+        public Game(Guid newID)
         {
+            this.GameID = newID;
             this.Player = new Player() { Username = "stephludgate" };
             this.Dealer = new Dealer();
             this.Deck = new Deck();

@@ -37,3 +37,4 @@ C:\Users\steph\source\repos\Blackjack\Blackjack\obj\Debug\netcoreapp2.1\Blackjac
 C:\Users\steph\source\repos\Blackjack\Blackjack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Instructions.cshtml.g.cs
 C:\Users\steph\source\repos\Blackjack\Blackjack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Play.cshtml.g.cs
 C:\Users\steph\source\repos\Blackjack\Blackjack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Hit.cshtml.g.cs
+C:\Users\steph\source\repos\Blackjack\Blackjack\obj\Debug\netcoreapp2.1\Razor\Views\Home\Start.cshtml.g.cs
