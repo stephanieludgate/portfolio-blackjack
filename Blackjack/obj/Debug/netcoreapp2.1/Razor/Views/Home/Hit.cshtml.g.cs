@@ -157,7 +157,7 @@ using Blackjack.Models;
             WriteLiteral("</div>\r\n        ");
             EndContext();
             BeginContext(778, 114, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8e22dbf08b304753b672f79fb2bf8125", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "62e48a2c99b342f4a898ae81b699dce9", async() => {
                 BeginContext(802, 83, true);
                 WriteLiteral("\r\n            <input type=\"submit\" value=\"Hit\" class=\"btn btn-default\" />\r\n        ");
                 EndContext();

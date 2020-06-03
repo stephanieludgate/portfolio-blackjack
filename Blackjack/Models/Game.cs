@@ -11,33 +11,90 @@ namespace Blackjack.Models
         public Player Player { get; set; }
         public Dealer Dealer { get; set; }
         public Deck Deck { get; set; }
-        public bool IsActive { get; set; }
+        public int Bet { get; set; }
+        public GameState GameState { get; set; }
+        public bool DealerMove { get; set; }
 
-        public Game(Guid newID)
+        public Game(Guid newID, String username)
         {
             this.GameID = newID;
-            this.Player = new Player() { Username = "stephludgate" };
+            this.Player = new Player() { Username = username };
             this.Dealer = new Dealer();
+            //this.Deck = new Deck();
+            //this.GameState = GameState.PLAY;
+            //this.DealerMove = false;
+        }
+
+        public void NewRound()
+        {
+            // CLEAR any existing cards/hands
+            //this.Deck.Cards.Clear();
+            //this.Player.Hand.Cards.Clear();
+            //this.Dealer.Hand.Cards.Clear();
+
+            // NEW round
             this.Deck = new Deck();
-            this.IsActive = true;
+            this.GameState = GameState.PLAY;
+            this.DealerMove = false;
+
+            // CHECK for existing cards
+            if (this.Player.Hand.Cards.Count > 0)
+            {
+                this.Player.Hand.Cards.Clear();
+                this.Dealer.Hand.Cards.Clear();
+            }
+            // Add 2 cards each
+            this.Player.Hand.Cards.Add(this.Deck.DealCard());
+            this.Dealer.Hand.Cards.Add(this.Deck.DealCard());
+            this.Player.Hand.Cards.Add(this.Deck.DealCard());
+            this.Dealer.Hand.Cards.Add(this.Deck.DealCard());
         }
 
-        public bool Stand()
+        public void PlaceBet(int betting)
         {
-            // compare hands
-            return (Player.Hand.SumOfHand() > Dealer.Hand.SumOfHand()); // return true if player has higher value
+            this.Bet = betting;
+            this.Player.Balance -= betting;
         }
 
-        public bool Hit()
+        public void WinBet()
         {
-            Player.Hand.Cards.Add(Deck.DealCard());
-            // check to see value of player hand
-            if (Player.Hand.SumOfHand() >= 21)
-                return false; // game is over
+            this.Player.Balance += (this.Bet * 2);
+            this.Bet = 0;
+        }
+
+        public void LoseBet()
+        {
+            this.Bet = 0;
+        }
+
+        public void PlayerHit()
+        {
+            this.Player.Hand.Cards.Add(this.Deck.DealCard());
+        }
+        public void DealerHit()
+        {
+            this.Dealer.Hand.Cards.Add(this.Deck.DealCard());
+        }
+
+        public void CompareHands()
+        {
+            if (this.Dealer.Hand.SumOfHand() > 21 || this.Player.Hand.SumOfHand() > this.Dealer.Hand.SumOfHand())
+            {
+                this.GameState = GameState.WIN;
+                this.WinBet();
+            }
             else
-                return true; // player's hand is less than 21, can continue
+            {
+                this.GameState = GameState.LOSE;
+                this.LoseBet();
+            }
         }
+    }
 
-
+    public enum GameState
+    {
+        PLAY,
+        WIN,
+        LOSE
     }
 }

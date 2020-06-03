@@ -2,29 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="contentBox col-6 offset-3 my-5 p-4 bg-light text-dark border border-dark rounded-lg">
-        <h3>Welcome to Blackjack!</h3>
-        <p>
-            Put some images here <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-            Blah blah blah.. <br />
-
-        </p>
-        <a class="btn btn-success mt-3" asp-controller="Home" asp-action="Start">Play Game!</a>
-    </div>
+<div class="contentBox col-md-6 border border-dark rounded-lg text-center">
+    <div><img src="~/images/blackjack.png" height="200" /></div>
+    <form method="post">
+        <div style="padding: 25px 0px !important;">
+            <input type="text" placeholder="username" name="username" />
+        </div>
+        <input type="submit" value="Play Game!" class="btn btn-success" />
+    </form>
+</div>
 

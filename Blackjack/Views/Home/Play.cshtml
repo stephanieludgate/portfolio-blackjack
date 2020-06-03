@@ -11,55 +11,87 @@
     }
 }
 
-<div class="contentBox col-6 offset-3 my-5 p-4 bg-light text-dark border border-dark rounded-lg" id="casinoBox">
-    <h3>Method = @ViewData["Title"]</h3>
-    <h4>Dealer</h4>
+<div class="contentBox col-md-10 col-md-offset-1 my-5 p-4 bg-light text-dark border border-dark rounded-lg" id="casinoBox">
+    <div class="row">
+        <div class="col-sm-10">
+            <h3 style="margin-top: 0px !important;">
+                Dealer ( @if (Model.GameState == GameState.PLAY)
+                {
+                    <text>&gt; </text> @Model.Dealer.Hand.DealerConcealedHand()}
+                else
+                { @Model.Dealer.Hand.SumOfHand()}  )
+            </h3>
+        </div>
+        <div class="col-sm-2 text-center" id="balance"><h6>Balance : $@Html.DisplayFor(model => model.Player.Balance)</h6></div>
+    </div>
+
+
     <div id="dealersCards">
         @foreach (var item in Model.Dealer.Hand.Cards)
         {
             if (item == Model.Dealer.Hand.Cards.ElementAt(0))
             {
-                <img src="~/images/Back.png" height="150" />
+                if (Model.GameState == GameState.PLAY)
+                {
+                    <img src="~/images/Back.png" height="140" />
+                }
+                else
+                {
+                    <img src="~/images/@item.ImagePath" height="140" />
+                }
             }
             else
             {
-                <img src="~/images/@item.ImagePath" height="150" class="shift" />
+                <img src="~/images/@item.ImagePath" height="140" class="shift" />
             }
         }
     </div>
-    <h4>Player: @Html.DisplayFor(model => model.Player.Username) <em>(value = @Model.Player.Hand.SumOfHand() )</em></h4>
+    <div class="row middle-row">
+
+        @if (!Model.DealerMove && Model.GameState == GameState.PLAY)
+        {
+
+            <div class="col-sm-5 text-right"><a class="btn btn-default mt-3 playButton" asp-controller="Home" asp-action="Hit">Hit</a></div>
+            <div class="col-sm-2 text-center">
+                Betting $@Html.DisplayFor(model => model.Bet)
+            </div>
+            <div class="col-sm-5">
+                <a class="btn btn-default mt-3 playButton" asp-controller="Home" asp-action="Stand">Stand</a>
+            </div>
+        }
+        else
+        {
+            if (Model.GameState == GameState.WIN)
+            {
+                <div class="text-center">
+                <h4>WIN!</h4>
+                <a class="btn btn-default mt-3" asp-controller="Home" asp-action="Start">Play Again!</a>
+            </div>
+        }
+        else if (Model.GameState == GameState.LOSE)
+        {
+            <div class="text-center">
+                <h4>LOST!</h4>
+                <a class="btn btn-default mt-3" asp-controller="Home" asp-action="Start">Try Again!</a>
+
+            </div>
+        }
+    }
+    </div>
+
+    <h3>@Html.DisplayFor(model => model.Player.Username) ( @Model.Player.Hand.SumOfHand() )</h3>
     <div id="playersCards">
         @foreach (var item in Model.Player.Hand.Cards)
         {
-            <img src="~/images/@item.ImagePath" height="150" />
+            if (item == Model.Player.Hand.Cards.ElementAt(0))
+            {
+                <img src="~/images/@item.ImagePath" height="140" />
+            }
+            else
+            {
+                <img src="~/images/@item.ImagePath" height="140" class="shift" />
+            }
         }
     </div>
-
-    <form method="post" asp-action="Play">
-        <input type="text" asp-for="GameID" />
-        <input type="text" asp-for="Player.Bet" />
-        <input type="radio" id="stand" name="gamePlay" value="stand" />
-        <label for="stand">Stand</label><br>
-        <input type="radio" id="hit" name="gamePlay" value="hit" />
-        <label for="stand">Hit</label><br>
-        <input type="submit" value="Submit Move" class="btn btn-default" />
-    </form>
-
-    <a class="btn btn-success mt-3" asp-controller="Home" asp-action="Hit">Add Cards!</a>
-
-
-    @*<a asp-action="Hit" asp-route-id="@GameID" class="btn">Hit Me</a>
-        <a asp-action="Hit" class="btn btn-light">Hit</a>
-        <button asp-action="Hit" asp-route-id="@GameID" class="btn">Hit</button>*@
-
-    @*<form asp-action="Hit">
-            <input type="submit" value="Hit" class="btn btn-default" />
-        </form>
-        <form asp-action="Stand">
-            <input type="submit" value="Stand" class="btn btn-default" />
-        </form>*@
-    }
-
-
-</div>
+    </div>
 
